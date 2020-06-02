@@ -21,6 +21,11 @@ export default {
   },
 
   props: {
+    category: {
+      required: true,
+      type: String
+    },
+    
     forums: {
       required: true,
       type: Array

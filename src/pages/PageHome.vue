@@ -1,7 +1,9 @@
 <template>
   <div class="col-full">
       <h1>Welcome to the forum</h1>
-    <ForumList :forums="forums"/>
+    <ForumList
+      v-for="" 
+      :forums="forums"/>
   </div>
 </template>
 
@@ -28,6 +30,7 @@ export default {
 
   data () {
     return {
+      categories: Object.values(sourceData.categories),
       forums: Object.values(sourceData.forums),
       posts: sourceData.posts,
       users: sourceData.users
