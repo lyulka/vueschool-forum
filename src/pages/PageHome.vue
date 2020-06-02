@@ -1,17 +1,13 @@
 <template>
   <div class="col-full">
       <h1>Welcome to the forum</h1>
-    <ForumList
-      v-for="category in categories" 
-      :category="category.name"
-      :forums="forums.filter(forum => forum.categoryId === category['.key'])"
-      :key="category['.key']"/>
+    <CategoryList :categories="categories"/>
   </div>
 </template>
 
 <script>
 import sourceData from '@/data.json'
-import ForumList from '@/components/ForumList'
+import CategoryList from '@/components/CategoryList'
 console.log(sourceData)
 
 // This is how you 'declare' and export a component
@@ -27,15 +23,12 @@ export default {
     the components property of the exported component.
   */
   components: {
-    ForumList
+    CategoryList
   },
 
   data () {
     return {
-      categories: Object.values(sourceData.categories),
-      forums: Object.values(sourceData.forums),
-      posts: sourceData.posts,
-      users: sourceData.users
+      categories: Object.values(sourceData.categories)
     }
   }
 }

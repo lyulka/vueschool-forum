@@ -1,16 +1,11 @@
 <template>
-  <div class="forum-list">
-
-    <h2 class="list-title">
-        <a href="#">{{category}}</a>
-    </h2>
-
-    <ForumListItem 
+<div>
+      <ForumListItem
       v-for="forum in forums"
       :forum="forum"
       :key="forum['.key']"
     />
-  </div>
+</div>
 </template>
 
 <script>
@@ -21,11 +16,6 @@ export default {
   },
 
   props: {
-    category: {
-      required: true,
-      type: String
-    },
-
     forums: {
       required: true,
       type: Array
@@ -33,3 +23,7 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+
+</style>
