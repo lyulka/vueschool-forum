@@ -1,13 +1,13 @@
 <template>
   <div class="col-full">
       <h1>Welcome to the forum</h1>
-    <ThreadList :threads="threads"/>
+    <ForumList :forums="forums"/>
   </div>
 </template>
 
 <script>
 import sourceData from '@/data.json'
-import ThreadList from '@/components/ThreadList'
+import ForumList from '@/components/ForumList'
 console.log(sourceData)
 
 // This is how you 'declare' and export a component
@@ -23,12 +23,12 @@ export default {
     the components property of the exported component.
   */
   components: {
-    ThreadList
+    ForumList
   },
 
   data () {
     return {
-      threads: Object.values(sourceData.threads),
+      forums: Object.values(sourceData.forums),
       posts: sourceData.posts,
       users: sourceData.users
     }
