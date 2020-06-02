@@ -2,7 +2,7 @@
   <div class="forum-list">
 
     <h2 class="list-title">
-        <a href="#">Forums</a>
+        <a href="#">{{category}}</a>
     </h2>
 
     <ForumListItem 
@@ -25,7 +25,7 @@ export default {
       required: true,
       type: String
     },
-    
+
     forums: {
       required: true,
       type: Array

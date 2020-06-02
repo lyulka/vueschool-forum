@@ -2,8 +2,10 @@
   <div class="col-full">
       <h1>Welcome to the forum</h1>
     <ForumList
-      v-for="" 
-      :forums="forums"/>
+      v-for="category in categories" 
+      :category="category.name"
+      :forums="forums.filter(forum => forum.categoryId === category['.key'])"
+      :key="category['.key']"/>
   </div>
 </template>
 
