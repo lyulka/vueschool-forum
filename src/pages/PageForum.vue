@@ -20,7 +20,6 @@
 
 <script>
 import ThreadList from '@/components/ThreadList'
-import sourceData from '@/data'
 
 export default {
   components: {
@@ -37,11 +36,11 @@ export default {
   // computed properties will always be evaluated whenever their dependencies change
   computed: {
     forum () {
-      return sourceData.forums[this.id]
+      return this.$store.state.forums[this.id]
     },
 
     threads () {
-      return Object.values(sourceData.threads)
+      return Object.values(this.$store.state.threads)
         .filter(thread => thread.forumId === this.id)
     }
   }

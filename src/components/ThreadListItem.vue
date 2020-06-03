@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import sourceData from '@/data.json'
+import { countObjectProperties } from '@/helpers/index'
 
 export default {
 
@@ -48,10 +48,10 @@ export default {
   // the same way you use a component's data.
   computed: {
     repliesCount () {
-      return Object.keys(this.thread.posts).length - 1
+      return countObjectProperties(this.thread.posts) - 1
     },
     user () {
-      return sourceData.users[this.thread.userId]
+      return this.$store.state.users[this.thread.userId]
     }
   }
 }

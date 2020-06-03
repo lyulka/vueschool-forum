@@ -7,7 +7,6 @@
 
 <script>
 import CategoryList from '@/components/CategoryList'
-console.log(sourceData)
 
 // This is how you 'declare' and export a component
 // which can be registered and reused later.
@@ -25,9 +24,9 @@ export default {
     CategoryList
   },
 
-  data () {
-    return {
-      categories: Object.values(this.$store.categories)
+  computed: {
+    categories () {
+      return Object.values(this.$store.state.categories)
     }
   }
 }

@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import sourceData from '@/data.json'
+import { countObjectProperties } from '@/helpers/index'
 
 export default {
 
@@ -37,15 +37,15 @@ export default {
 
   /*
   Using computed properties, we make sure that the user
-  will be updated if changes happen within sourceData.
+  will be updated if changes happen within the store.
   */
   computed: {
     user () {
-      return sourceData.users[this.post.userId]
+      return this.$store.state.users[this.post.userId]
     },
 
     userPostsCount () {
-      return Object.keys(this.user.posts).length
+      return countObjectProperties(this.user.posts)
     }
   }
 

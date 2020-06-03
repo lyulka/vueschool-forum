@@ -11,7 +11,6 @@
       <!-- Use the @ Vue directive to respond to events! -->
       <PostEditor
         :threadId="id"
-        @save="addPost"
       />
     </div>
   </div>
@@ -20,7 +19,6 @@
 <script>
 import PostList from '@/components/PostList'
 import PostEditor from '@/components/PostEditor'
-import sourceData from '@/data.json'
 
 export default {
   /*
@@ -45,7 +43,7 @@ export default {
       const postIds = Object.values(this.thread.posts)
 
       const postArray = postIds.map((postId) => {
-        return sourceData.posts[postId]
+        return this.$store.state.posts[postId]
       })
 
       // alternative way
@@ -53,23 +51,10 @@ export default {
       //   .filter(post => postIds.includes(post['.key']))
 
       return postArray
-    }
-  },
+    },
 
-  data () {
-    return {
-      thread: sourceData.threads[this.id],
-      newPostText: ''
-    }
-  },
-
-  methods: {
-    addPost ({post}) {
-      const postId = post['.key']
-
-      this.$set(sourceData.posts, postId, post)
-      this.$set(this.thread.posts, postId, postId)
-      this.$set(sourceData.$users[post.userId].posts, postId, postId)
+    thread () {
+      return this.$store.state.threads[this.id]
     }
   }
 }

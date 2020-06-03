@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <div class="container">
+    <TheNavbar/>
+    <div class="container push-top">
       <!-- A functional component that renders the matched component
       for the active route. -->
       <router-view/>
@@ -9,9 +10,12 @@
 </template>
 
 <script>
+import TheNavbar from '@/components/TheNavbar'
 
 export default {
-  name: 'app'
+  components: {
+    TheNavbar
+  }
 }
 </script>
 
