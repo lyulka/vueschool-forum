@@ -9,6 +9,9 @@ import Forum from '@/pages/PageForum'
 /*
 This is how you would use Vue Router
 if it wasn't present in your application
+
+So basically, you call methods on the Vue instance
+to register / use things globally
 */
 Vue.use(Router)
 

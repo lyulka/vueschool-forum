@@ -5,6 +5,9 @@ import App from './App'
 import router from './router'
 // You sohuld import and register global base components from main.js, because it stores the global Vue instance
 import AppDate from '@/components/AppDate'
+import store from '@/store'
+
+// This is how you register a component globally
 Vue.component('AppDate', AppDate)
 
 Vue.config.productionTip = false
@@ -17,6 +20,7 @@ new Vue({
   components are aware of the router and they have
   access to special components like router-view */
   router,
+  store,
   template: '<App/>',
   components: { App }
 })

@@ -8,6 +8,7 @@
         By <a href="#" class="link-unstyled">Robin</a>, <AppDate :timestamp="thread.publishedAt"/>.
       </p>
       <PostList :posts="posts"/>
+      <!-- Use the @ Vue directive to respond to events! -->
       <PostEditor
         :threadId="id"
         @save="addPost"
