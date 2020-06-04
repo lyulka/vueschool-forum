@@ -3,6 +3,8 @@ import Router from 'vue-router'
 import Home from '@/pages/PageHome'
 import Category from '@/pages/PageCategory'
 import ThreadShow from '@/pages/PageThreadShow'
+import ThreadCreate from '@/pages/PageThreadCreate'
+import ThreadEdit from '@/pages/PageThreadEdit'
 import NotFound from '@/pages/PageNotFound'
 import Forum from '@/pages/PageForum'
 import Profile from '@/pages/PageProfile'
@@ -29,6 +31,12 @@ export default new Router({
       component: Home
     },
     {
+      path: '/thread/create/:forumId',
+      name: 'ThreadCreate',
+      component: ThreadCreate,
+      props: true
+    },
+    {
       // Each part of the path separated by a slash
       // is a dynamic segment. A dynamic segment is
       // defined with a colon.
@@ -43,6 +51,12 @@ export default new Router({
       path: '/thread/:id',
       name: 'ThreadShow',
       component: ThreadShow,
+      props: true
+    },
+    {
+      path: '/thread/:id/edit',
+      name: 'ThreadEdit',
+      component: ThreadEdit,
       props: true
     },
     {
