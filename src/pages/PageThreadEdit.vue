@@ -45,11 +45,11 @@ export default {
       }).then(thread => {
         this.$router.push({name: 'ThreadShow', params: {id: this.id}})
       })
-    }
-  },
+    },
 
-  cancel () {
-    this.$router.push({name: 'ThreadShow', params: {id: this.id}})
+    cancel () {
+      this.$router.push({name: 'ThreadShow', params: {id: this.id}})
+    }
   }
 }
 </script>

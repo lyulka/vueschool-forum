@@ -12,7 +12,8 @@
           </textarea>
         </div>
         <div class="form-actions">
-          <button class="btn-blue">Submit post</button>
+          <button v-if="isUpdate" @click.prevent="cancel" class="btn btn-ghot">Cancel</button> 
+          <button class="btn-blue">{{isUpdate ? 'Update' : 'Submit post'}}</button>
         </div>
       </form>
   </div>
@@ -27,7 +28,20 @@ export default {
     },
 
     post: {
-      type: Object
+      type: Object,
+      validator: obj => {
+        const keyIsValid = typeof obj['.key'] === 'string'
+        const textIsValid = typeof obj.text === 'string'
+
+        const valid = keyIsValid && textIsValid
+        if (!textIsValid) {
+          console.error('The post prop object must contain the text attributes')
+        } else if (!keyIsValid) {
+          console.error('the post prop object must contain the key attribute')
+        }
+
+        return valid
+      }
     }
   },
 
@@ -49,6 +63,10 @@ export default {
         .then(post => {
           this.$emit('save', {post})
         })
+    },
+
+    cancel () {
+      this.$emit('cancel')
     },
 
     create () {
