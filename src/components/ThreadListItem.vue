@@ -30,8 +30,6 @@
 </template>
 
 <script>
-import { countObjectProperties } from '@/helpers/index'
-
 export default {
 
   props: {
@@ -48,7 +46,7 @@ export default {
   // the same way you use a component's data.
   computed: {
     repliesCount () {
-      return countObjectProperties(this.thread.posts) - 1
+      return this.$store.getters.threadRepliesCount(this.thread['.key'])
     },
     user () {
       return this.$store.state.users[this.thread.userId]

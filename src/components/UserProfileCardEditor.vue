@@ -57,14 +57,6 @@
         user: {
           required: true,
           type: Object
-        },
-        userPostsCount: {
-          required: true,
-          type: Number
-        },
-        userThreadsCount: {
-          required: true,
-          type: Number
         }
       },
       data () {
@@ -72,6 +64,17 @@
           activeUser: {...this.user}
         }
       },
+
+      computed: {
+        userThreadsCount () {
+          return this.$store.getters.userThreadsCount(this.user['.key'])
+        },
+
+        userPostsCount () {
+          return this.$store.getters.userPostsCount(this.user['.key'])
+        }
+      },
+
       methods: {
         save () {
           this.$store.dispatch('updateUser', {...this.activeUser})
