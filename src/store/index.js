@@ -1,28 +1,24 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
-import {countObjectProperties} from '@/helpers/index'
+// This is the proper way you import firebase into your app.
+import * as firebase from 'firebase/app'
+import 'firebase/database'
+import {countObjectProperties} from '@/helpers'
 
 Vue.use(Vuex)
 
-const makeAppendChildToParentMutation = ({parent, child}) => {
-  return (state, {childId, parentId}) => {
+const makeAppendChildToParentMutation = ({parent, child}) =>
+  (state, {childId, parentId}) => {
     const resource = state[parent][parentId]
-
     if (!resource[child]) {
       Vue.set(resource, child, {})
     }
-
-    // append post to a thread
     Vue.set(resource[child], childId, childId)
   }
-}
 
 export default new Vuex.Store({
   state: {
-    categories: {
-      'VXjpr2WHa8Ux4Bnggym8QFLdv5C3': 'VXjpr2WHa8Ux4Bnggym8QFLdv5C3'
-    },
+    categories: {},
     forums: {},
     threads: {},
     posts: {},
@@ -37,12 +33,11 @@ export default new Vuex.Store({
     },
 
     userThreadsCount: state => id => countObjectProperties(state.users[id].threads),
-
     userPostsCount: state => id => countObjectProperties(state.users[id].posts),
-
     threadRepliesCount: state => id => countObjectProperties(state.threads[id].posts) - 1
   },
 
+  // Actions are asynchronous. Returning promises from them can be very useful.
   actions: {
     createPost ({commit, state}, post) {
       const postId = 'greatPost' + Math.random()
@@ -63,6 +58,7 @@ export default new Vuex.Store({
         const publishedAt = Math.floor(Date.now() / 1000)
 
         const thread = {'.key': threadId, title, forumId, publishedAt, userId}
+
         commit('setThread', {threadId, thread})
         commit('appendThreadToForum', {parentId: forumId, childId: threadId})
         commit('appendThreadToUser', {parentId: userId, childId: threadId})
@@ -72,6 +68,19 @@ export default new Vuex.Store({
             commit('setThread', {threadId, thread: {...thread, firstPostId: post['.key']}})
           })
         resolve(state.threads[threadId])
+      })
+    },
+
+    updateThread ({state, commit, dispatch}, {title, text, id}) {
+      return new Promise((resolve, reject) => {
+        const thread = state.threads[id]
+        const newThread = {...thread, title}
+        commit('setThread', {thread: newThread, threadId: id})
+
+        dispatch('updatePost', {id: thread.firstPostId, text})
+          .then(() => {
+            resolve(newThread)
+          })
       })
     },
 
@@ -93,48 +102,64 @@ export default new Vuex.Store({
       })
     },
 
-    updateThread ({state, commit}, {id, title, text}) {
+    updateUser ({commit}, user) {
+      commit('setUser', {userId: user['.key'], user})
+    },
+
+    fetchThread ({state, commit}, {id}) {
+      console.log('🔥 📄', id)
       return new Promise((resolve, reject) => {
-        const thread = state.threads[id]
-
-        const newThread = {...thread, title}
-
-        commit('setThread', {thread: newThread, threadId: id})
-
-        this.dispatch('updatePost', {id: thread.firstPostId, text})
-          .then(() => {
-            resolve(newThread)
-          })
+        firebase.database().ref('threads').child(id).once('value', snapshot => {
+          const thread = snapshot.val()
+          commit('setThread', {threadId: snapshot.key, thread: {...thread, '.key': snapshot.key}})
+          resolve(state.threads[id])
+        })
       })
     },
 
-    updateUser ({commit}, user) {
-      commit('setUser', {userId: user['.key'], user: user})
+    fetchUser ({state, commit}, {id}) {
+      console.log('🔥 🙋‍', id)
+      return new Promise((resolve, reject) => {
+        firebase.database().ref('users').child(id).once('value', snapshot => {
+          const user = snapshot.val()
+          commit('setUser', {userId: snapshot.key, user: {...user, '.key': snapshot.key}})
+          resolve(state.users[id])
+        })
+      })
+    },
+
+    fetchPost ({state, commit}, {id}) {
+      console.log('🔥 💬‍', id)
+      return new Promise((resolve, reject) => {
+        firebase.database().ref('posts').child(id).once('value', snapshot => {
+          const post = snapshot.val()
+          commit('setPost', {postId: snapshot.key, post: {...post, '.key': snapshot.key}})
+          resolve(state.posts[id])
+        })
+      })
     }
   },
 
+  // mutations are synchronous
   mutations: {
     setPost (state, {post, postId}) {
-      // set post
       Vue.set(state.posts, postId, post)
     },
 
     setUser (state, {user, userId}) {
-      // set post
       Vue.set(state.users, userId, user)
     },
 
     setThread (state, {thread, threadId}) {
-      // Vue.set will create the property if it does not exist already.
       Vue.set(state.threads, threadId, thread)
     },
 
     appendPostToThread: makeAppendChildToParentMutation({parent: 'threads', child: 'posts'}),
 
-    appendPostToUser: makeAppendChildToParentMutation({parent: 'posts', child: 'users'}),
+    appendPostToUser: makeAppendChildToParentMutation({parent: 'users', child: 'posts'}),
 
-    appendThreadToForum: makeAppendChildToParentMutation({parent: 'threads', child: 'forums'}),
+    appendThreadToForum: makeAppendChildToParentMutation({parent: 'forums', child: 'threads'}),
 
-    appendThreadToUser: makeAppendChildToParentMutation({parent: 'threads', child: 'users'})
+    appendThreadToUser: makeAppendChildToParentMutation({parent: 'users', child: 'threads'})
   }
 })
